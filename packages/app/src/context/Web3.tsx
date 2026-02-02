@@ -13,6 +13,25 @@ export function Web3Provider(props: Props) {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    useEffect(() => {
+  createAppKit({
+    adapters: [WALLETCONNECT_ADAPTER],
+    projectId: WALLETCONNECT_PROJECT_ID,
+    networks: [mainnet, ...ETH_CHAINS],
+    defaultNetwork: mainnet,
+    metadata: {
+      name: SITE_NAME,
+      description: SITE_INFO,
+      url: SITE_URL,
+      icons: ['https://avatars.githubusercontent.com/u/25974464'],
+    },
+    features: {
+      analytics: true,
+      email: true,
+      onramp: true,
+    },
+  })
+}, [])
     setMounted(true)
   }, [])
 
