@@ -4,10 +4,13 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html>
-      <body>
-        <h1>ROOT ÇALIŞIYOR</h1>
-        {children}
+    <html lang="tr">
+      <body style={{ padding: 24 }}>
+        <header>
+          <h1>Evren Platformu</h1>
+        </header>
+
+        <main>{children}</main>
       </body>
     </html>
   )
