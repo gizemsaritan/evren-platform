@@ -6,7 +6,7 @@
   "dev": "next dev",
   "build": "npx next build",
   "start": "next start",
-  "lint": "next lint --fix"
+  "lint": "next lint --fix",
   "wagmi": "wagmi generate"
   },
   "dependencies": {
