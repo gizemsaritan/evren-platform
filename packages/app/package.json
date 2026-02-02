@@ -3,11 +3,11 @@
   "version": "0.2.0",
   "license": "MIT",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint --fix",
-    "wagmi": "wagmi generate"
+  "dev": "next dev",
+  "build": "npx next build",
+  "start": "next start",
+  "lint": "next lint --fix"
+  "wagmi": "wagmi generate"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",

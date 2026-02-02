@@ -7,8 +7,8 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "yarn workspaces -pt run dev",
-    "build": "yarn workspaces -pt run build",
-    "test": "yarn workspaces -pt run test"
-  }
+  "dev": "yarn workspace app dev",
+  "build": "yarn workspace app build",
+  "test": "yarn workspace app test"
+}
 }
