@@ -11,10 +11,10 @@ export default function Home() {
   const router = useRouter();
   const [transitioning, setTransitioning] = useState(false);
 
-  // ⭐ YILDIZLAR – ESKİ İYİ HAL (GERÇEK GLOW)
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
@@ -46,9 +46,16 @@ export default function Home() {
       })),
     ];
 
-    function drawStar(s: any) {
+    const drawStar = (s: any) => {
       const radius = s.r * 3;
-      const g = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, radius);
+      const g = ctx.createRadialGradient(
+        s.x,
+        s.y,
+        0,
+        s.x,
+        s.y,
+        radius
+      );
       g.addColorStop(0, 'rgba(255,255,255,0.9)');
       g.addColorStop(0.4, 'rgba(255,255,255,0.4)');
       g.addColorStop(1, 'rgba(255,255,255,0)');
@@ -56,9 +63,9 @@ export default function Home() {
       ctx.fillStyle = g;
       ctx.arc(s.x, s.y, radius, 0, Math.PI * 2);
       ctx.fill();
-    }
+    };
 
-    function animate() {
+    const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       stars.forEach((s) => {
         s.y -= s.speed;
@@ -69,7 +76,7 @@ export default function Home() {
         drawStar(s);
       });
       requestAnimationFrame(animate);
-    }
+    };
 
     animate();
     return () => window.removeEventListener('resize', resize);
@@ -106,21 +113,18 @@ export default function Home() {
             priority
           />
 
-          {/* GÜNEŞ */}
           <button
             className="hit"
             style={{ top: 0, left: 0, width: 90, height: 90 }}
             onClick={() => enter('gunes')}
           />
 
-          {/* YILDIZ */}
           <button
             className="hit"
             style={{ top: 0, right: 70, width: 80, height: 80 }}
             onClick={() => enter('yildizlar')}
           />
 
-          {/* AY */}
           <button
             className="hit"
             style={{ bottom: 20, right: 20, width: 80, height: 80 }}
