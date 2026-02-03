@@ -1,0 +1,32 @@
+body {
+  margin: 0;
+  background: black;
+  color: white;
+  font-family: "Georgia", serif;
+  overflow: hidden;
+}
+
+/* yıldız katmanı */
+.stars {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  box-shadow:
+    100px 200px white,
+    300px 400px white,
+    600px 150px white,
+    900px 700px white,
+    1200px 300px white,
+    1500px 600px white;
+  animation: drift 60s linear infinite;
+}
+
+@keyframes drift {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-2000px);
+  }
+}

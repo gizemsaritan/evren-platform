@@ -1,17 +1,19 @@
+import './globals.css'
+import { ReactNode } from 'react'
+
+export const metadata = {
+  title: 'Pure Mystic Kids',
+  description: 'A living, collective story that connects all beings.',
+}
+
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: ReactNode
 }) {
   return (
     <html lang="en">
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body style={{ margin: 0, fontFamily: "'Cinzel', serif" }}>
+      <body>
         {children}
       </body>
     </html>
