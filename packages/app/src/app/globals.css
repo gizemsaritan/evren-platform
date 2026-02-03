@@ -1,32 +1,44 @@
-body {
+* {
+  box-sizing: border-box;
+}
+
+html, body {
   margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
   background: black;
   color: white;
   font-family: "Georgia", serif;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
-/* yıldız katmanı */
+/* YILDIZ KATMANI */
 .stars {
   position: fixed;
-  width: 100%;
-  height: 100%;
+  inset: 0;
+  z-index: 0;
   background: transparent;
-  box-shadow:
-    100px 200px white,
-    300px 400px white,
-    600px 150px white,
-    900px 700px white,
-    1200px 300px white,
-    1500px 600px white;
-  animation: drift 60s linear infinite;
 }
 
-@keyframes drift {
+.stars::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 20% 30%, white, transparent),
+    radial-gradient(1px 1px at 40% 70%, white, transparent),
+    radial-gradient(1px 1px at 60% 20%, white, transparent),
+    radial-gradient(1px 1px at 80% 50%, white, transparent),
+    radial-gradient(1px 1px at 10% 90%, white, transparent);
+  animation: starsMove 60s linear infinite;
+}
+
+@keyframes starsMove {
   from {
     transform: translateY(0);
   }
   to {
-    transform: translateY(-2000px);
+    transform: translateY(-1000px);
   }
 }
