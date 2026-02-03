@@ -1,15 +1,9 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-
-type Target = 'gunes' | 'ay' | 'yildizlar' | null;
+import { useEffect, useRef } from 'react';
 
 export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const router = useRouter();
-  const [transitioning, setTransitioning] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -25,56 +19,30 @@ export default function Home() {
     resize();
     window.addEventListener('resize', resize);
 
-    const stars = [
-      ...Array.from({ length: 220 }, () => ({
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight,
-        r: Math.random() * 0.6 + 0.3,
-        speed: 0.04,
-      })),
-      ...Array.from({ length: 120 }, () => ({
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight,
-        r: Math.random() * 1.2 + 0.7,
-        speed: 0.1,
-      })),
-      ...Array.from({ length: 40 }, () => ({
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight,
-        r: Math.random() * 2.2 + 1.2,
-        speed: 0.18,
-      })),
-    ];
-
-    const drawStar = (s: any) => {
-      const radius = s.r * 3;
-      const g = ctx.createRadialGradient(
-        s.x,
-        s.y,
-        0,
-        s.x,
-        s.y,
-        radius
-      );
-      g.addColorStop(0, 'rgba(255,255,255,0.9)');
-      g.addColorStop(0.4, 'rgba(255,255,255,0.4)');
-      g.addColorStop(1, 'rgba(255,255,255,0)');
-      ctx.beginPath();
-      ctx.fillStyle = g;
-      ctx.arc(s.x, s.y, radius, 0, Math.PI * 2);
-      ctx.fill();
-    };
+    const stars = Array.from({ length: 320 }, () => ({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      r: Math.random() * 1.8 + 0.4,
+      speed: Math.random() * 0.25 + 0.05,
+      alpha: Math.random() * 0.7 + 0.2,
+    }));
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
       stars.forEach((s) => {
         s.y -= s.speed;
-        if (s.y < -20) {
-          s.y = canvas.height + 20;
+        if (s.y < 0) {
+          s.y = canvas.height;
           s.x = Math.random() * canvas.width;
         }
-        drawStar(s);
+
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${s.alpha})`;
+        ctx.fill();
       });
+
       requestAnimationFrame(animate);
     };
 
@@ -82,55 +50,83 @@ export default function Home() {
     return () => window.removeEventListener('resize', resize);
   }, []);
 
-  const enter = (t: Target) => {
-    if (transitioning) return;
-    setTransitioning(true);
-    setTimeout(() => router.push(`/${t}`), 1200);
-  };
-
   return (
     <>
-      <div className="stars" />
-      <canvas ref={canvasRef} id="star-canvas" />
+      {/* 🌌 ARKA PLAN — MOR + LACİVERT + SİYAH */}
+      <div
+        style={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: 0,
+          background: `
+            radial-gradient(circle at 15% 20%, #6a3fa0 0%, transparent 40%),
+            radial-gradient(circle at 85% 30%, #1b1e4b 0%, transparent 45%),
+            radial-gradient(circle at 50% 80%, #000000 0%, transparent 50%),
+            radial-gradient(circle at 70% 70%, #000000 0%, transparent 55%),
+            linear-gradient(180deg, #050510, #000000)
+          `,
+        }}
+      />
 
-      <main className="hero">
-        <h1>PURE MYSTIC KIDS</h1>
+      {/* ⭐ YILDIZLAR */}
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: 1,
+          pointerEvents: 'none',
+        }}
+      />
 
-        <p className="subtitle">
+      {/* 🪐 İÇERİK */}
+      <main
+        style={{
+          position: 'relative',
+          zIndex: 2,
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          textAlign: 'center',
+          color: '#e6e1ff',
+          padding: '0 24px',
+        }}
+      >
+        <h1
+          style={{
+            fontFamily: '"Modern Antiqua", serif',
+            fontSize: '4rem',
+            letterSpacing: '0.25em',
+            margin: 0,
+          }}
+        >
+          PURE MYSTIC KIDS
+        </h1>
+
+        <p
+          style={{
+            fontFamily: '"Tangerine", cursive',
+            fontSize: '2.4rem',
+            marginTop: '16px',
+            marginBottom: '36px',
+            opacity: 0.9,
+          }}
+        >
           The Universe through a Virtuous Kid&apos;s Eye
         </p>
 
-        <p className="desc">
-          A living, collective story that connects all beings.
-        </p>
-
-        <div className="logo-portal">
-          <Image
-            src="/Pmk.png"
-            alt="Pure Mystic Kids Portal"
-            width={260}
-            height={260}
-            priority
-          />
-
-          <button
-            className="hit"
-            style={{ top: 0, left: 0, width: 90, height: 90 }}
-            onClick={() => enter('gunes')}
-          />
-
-          <button
-            className="hit"
-            style={{ top: 0, right: 70, width: 80, height: 80 }}
-            onClick={() => enter('yildizlar')}
-          />
-
-          <button
-            className="hit"
-            style={{ bottom: 20, right: 20, width: 80, height: 80 }}
-            onClick={() => enter('ay')}
-          />
-        </div>
+        {/* 🌀 LOGO */}
+        <img
+          src="/Pmk.png"
+          alt="Pure Mystic Kids Portal"
+          style={{
+            width: '380px',
+            height: '380px',
+            display: 'block',
+          }}
+        />
       </main>
     </>
   );
