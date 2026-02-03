@@ -1,14 +1,15 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
@@ -29,20 +30,17 @@ export default function Home() {
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
       stars.forEach((s) => {
         s.y -= s.speed;
         if (s.y < 0) {
           s.y = canvas.height;
           s.x = Math.random() * canvas.width;
         }
-
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255,255,255,${s.alpha})`;
         ctx.fill();
       });
-
       requestAnimationFrame(animate);
     };
 
@@ -52,7 +50,7 @@ export default function Home() {
 
   return (
     <>
-      {/* 🌌 ARKA PLAN — MOR + LACİVERT + SİYAH */}
+      {/* 🌌 ARKA PLAN */}
       <div
         style={{
           position: 'fixed',
@@ -68,7 +66,7 @@ export default function Home() {
         }}
       />
 
-      {/* ⭐ YILDIZLAR */}
+      {/* ⭐ YILDIZ CANVAS */}
       <canvas
         ref={canvasRef}
         style={{
@@ -117,16 +115,117 @@ export default function Home() {
           The Universe through a Virtuous Kid&apos;s Eye
         </p>
 
-        {/* 🌀 LOGO */}
-        <img
-          src="/Pmk.png"
-          alt="Pure Mystic Kids Portal"
+        {/* 🌀 LOGO + ETKİLEŞİM */}
+        <div
           style={{
+            position: 'relative',
             width: '380px',
             height: '380px',
-            display: 'block',
           }}
-        />
+        >
+          {/* LOGO */}
+          <img
+            src="/Pmk.png"
+            alt="Pure Mystic Kids Portal"
+            style={{
+              width: '380px',
+              height: '380px',
+              display: 'block',
+              transition: 'transform 0.3s ease',
+            }}
+          />
+
+          {/* ☀️ GÜNEŞ */}
+          <button
+            onClick={() => router.push('/gunes')}
+            style={{
+              position: 'absolute',
+              top: '0',
+              left: '0',
+              width: '140px',
+              height: '140px',
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+            }}
+            onMouseEnter={(e) =>
+              ((e.currentTarget.previousSibling as HTMLElement).style.transform =
+                'scale(1.05)')
+            }
+            onMouseLeave={(e) =>
+              ((e.currentTarget.previousSibling as HTMLElement).style.transform =
+                'scale(1)')
+            }
+          />
+
+          {/* 🌙 AY */}
+          <button
+            onClick={() => router.push('/ay')}
+            style={{
+              position: 'absolute',
+              bottom: '40px',
+              right: '0',
+              width: '140px',
+              height: '140px',
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+            }}
+            onMouseEnter={(e) =>
+              ((e.currentTarget.previousSibling as HTMLElement).style.transform =
+                'scale(1.05)')
+            }
+            onMouseLeave={(e) =>
+              ((e.currentTarget.previousSibling as HTMLElement).style.transform =
+                'scale(1)')
+            }
+          />
+
+          {/* ⭐ MERKEZ YILDIZ */}
+          <button
+            onClick={() => router.push('/yildizlar')}
+            style={{
+              position: 'absolute',
+              top: '120px',
+              left: '120px',
+              width: '140px',
+              height: '140px',
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+            }}
+          />
+
+          {/* ⭐ ÜST SOL YILDIZ */}
+          <button
+            onClick={() => router.push('/yildizlar')}
+            style={{
+              position: 'absolute',
+              top: '20px',
+              left: '180px',
+              width: '80px',
+              height: '80px',
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+            }}
+          />
+
+          {/* ⭐ ÜST SAĞ YILDIZ */}
+          <button
+            onClick={() => router.push('/yildizlar')}
+            style={{
+              position: 'absolute',
+              top: '40px',
+              right: '20px',
+              width: '80px',
+              height: '80px',
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+            }}
+          />
+        </div>
       </main>
     </>
   );
