@@ -7,9 +7,7 @@ export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const timeoutsRef = useRef<number[]>([]);
   const router = useRouter();
-  const [stage, setStage] = useState<'idle' | 'blackHole' | 'whiteHole'>(
-    'idle',
-  );
+  const [stage, setStage] = useState<'idle' | 'blackHole'>('idle');
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -63,8 +61,7 @@ export default function Home() {
     if (stage !== 'idle') return;
     setStage('blackHole');
     timeoutsRef.current = [
-      window.setTimeout(() => setStage('whiteHole'), 2200),
-      window.setTimeout(() => router.push('/gunes'), 3000),
+      window.setTimeout(() => router.push('/gunes'), 2200),
     ];
   };
 
@@ -91,12 +88,6 @@ export default function Home() {
           stage === 'blackHole' ? 'active' : ''
         }`}
       />
-      <div
-        className={`portal-overlay white-hole ${
-          stage === 'whiteHole' ? 'active' : ''
-        }`}
-      />
-
       {/* ⭐ YILDIZ CANVAS */}
       <canvas
         ref={canvasRef}
@@ -161,11 +152,7 @@ export default function Home() {
             src="/Pmk.png"
             alt="Pure Mystic Kids Portal"
             className={`portal-logo ${
-              stage === 'idle'
-                ? 'portal-idle'
-                : stage === 'blackHole'
-                  ? 'portal-black'
-                  : 'portal-white'
+              stage === 'idle' ? 'portal-idle' : 'portal-black'
             }`}
             style={{
               width: '100%',
@@ -243,10 +230,6 @@ export default function Home() {
           animation: portalDive 2.2s cubic-bezier(0.16, 0, 0.3, 1) forwards;
         }
 
-        .portal-white {
-          animation: portalFade 0.8s ease-out forwards;
-        }
-
         .portal-overlay {
           position: fixed;
           top: 50%;
@@ -263,31 +246,16 @@ export default function Home() {
         .black-hole {
           background: radial-gradient(
             circle at center,
-            rgba(0, 0, 0, 0) 0%,
-            rgba(0, 0, 0, 0.6) 35%,
-            rgba(0, 0, 0, 0.9) 60%,
-            rgba(0, 0, 0, 1) 100%
-          );
-          mix-blend-mode: multiply;
-        }
-
-        .white-hole {
-          background: radial-gradient(
-            circle at center,
-            rgba(255, 255, 255, 1) 0%,
-            rgba(255, 255, 255, 0.9) 35%,
-            rgba(255, 255, 255, 0.5) 60%,
-            rgba(255, 255, 255, 0) 100%
+            rgba(0, 0, 0, 1) 0%,
+            rgba(0, 0, 0, 1) 45%,
+            rgba(0, 0, 0, 0.95) 62%,
+            rgba(0, 0, 0, 0) 80%
           );
         }
 
         .black-hole.active {
           animation: blackHolePull 2.2s cubic-bezier(0.16, 0, 0.3, 1)
             forwards;
-        }
-
-        .white-hole.active {
-          animation: whiteHolePush 0.8s ease-out forwards;
         }
 
         @keyframes portalPulse {
@@ -313,17 +281,6 @@ export default function Home() {
           }
         }
 
-        @keyframes portalFade {
-          0% {
-            opacity: 1;
-            transform: scale(2.6);
-          }
-          100% {
-            opacity: 0;
-            transform: scale(3.1);
-          }
-        }
-
         @keyframes blackHolePull {
           0% {
             opacity: 0;
@@ -336,17 +293,6 @@ export default function Home() {
           100% {
             opacity: 1;
             transform: translate(-50%, -50%) scale(1.05);
-          }
-        }
-
-        @keyframes whiteHolePush {
-          0% {
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(0.2);
-          }
-          100% {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1.25);
           }
         }
       `}</style>
