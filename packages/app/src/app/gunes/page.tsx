@@ -5,5 +5,5 @@ export default function GunesEvreni() {
       <p>Teknoloji, hız ve kontrolün evreni.</p>
       <p><i>Bu evrende yazım henüz açık değil.</i></p>
     </div>
-  )
+  );
 }
