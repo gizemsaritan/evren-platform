@@ -1,11 +1,13 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const timeoutsRef = useRef<number[]>([]);
   const router = useRouter();
+  const [stage, setStage] = useState<'idle' | 'blackHole'>('idle');
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -48,6 +50,21 @@ export default function Home() {
     return () => window.removeEventListener('resize', resize);
   }, []);
 
+  useEffect(() => {
+    return () => {
+      timeoutsRef.current.forEach((timeout) => window.clearTimeout(timeout));
+      timeoutsRef.current = [];
+    };
+  }, []);
+
+  const startPortalTransition = () => {
+    if (stage !== 'idle') return;
+    setStage('blackHole');
+    timeoutsRef.current = [
+      window.setTimeout(() => router.push('/gunes'), 2200),
+    ];
+  };
+
   return (
     <>
       {/* 🌌 ARKA PLAN */}
@@ -66,6 +83,11 @@ export default function Home() {
         }}
       />
 
+      <div
+        className={`portal-overlay black-hole ${
+          stage === 'blackHole' ? 'active' : ''
+        }`}
+      />
       {/* ⭐ YILDIZ CANVAS */}
       <canvas
         ref={canvasRef}
@@ -90,6 +112,7 @@ export default function Home() {
           textAlign: 'center',
           color: '#e6e1ff',
           padding: '0 16px',
+          pointerEvents: stage === 'idle' ? 'auto' : 'none',
         }}
       >
         {/* BAŞLIK */}
@@ -128,12 +151,16 @@ export default function Home() {
           <img
             src="/Pmk.png"
             alt="Pure Mystic Kids Portal"
+            className={`portal-logo ${
+              stage === 'idle' ? 'portal-idle' : 'portal-black'
+            }`}
             style={{
               width: '100%',
               height: 'auto',
               display: 'block',
               transition: 'transform 0.3s ease',
             }}
+            onClick={startPortalTransition}
             onMouseEnter={(e) =>
               (e.currentTarget.style.transform = 'scale(1.06)')
             }
@@ -144,7 +171,7 @@ export default function Home() {
 
           {/* ☀️ */}
           <button
-            onClick={() => router.push('/gunes')}
+            onClick={startPortalTransition}
             style={{
               position: 'absolute',
               top: '0%',
@@ -153,6 +180,7 @@ export default function Home() {
               height: '35%',
               background: 'transparent',
               border: 'none',
+              cursor: 'pointer',
             }}
           />
 
@@ -167,6 +195,7 @@ export default function Home() {
               height: '35%',
               background: 'transparent',
               border: 'none',
+              cursor: 'pointer',
             }}
           />
 
@@ -181,10 +210,92 @@ export default function Home() {
               height: '40%',
               background: 'transparent',
               border: 'none',
+              cursor: 'pointer',
             }}
           />
         </div>
       </main>
+
+      <style jsx>{`
+        .portal-logo {
+          cursor: pointer;
+          filter: drop-shadow(0 0 18px rgba(182, 147, 255, 0.55));
+        }
+
+        .portal-idle {
+          animation: portalPulse 2.6s ease-in-out infinite;
+        }
+
+        .portal-black {
+          animation: portalDive 2.2s cubic-bezier(0.16, 0, 0.3, 1) forwards;
+        }
+
+        .portal-overlay {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          width: 200vmax;
+          height: 200vmax;
+          border-radius: 50%;
+          pointer-events: none;
+          z-index: 3;
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(0);
+        }
+
+        .black-hole {
+          background: radial-gradient(
+            circle at center,
+            rgba(0, 0, 0, 1) 0%,
+            rgba(0, 0, 0, 1) 45%,
+            rgba(0, 0, 0, 0.95) 62%,
+            rgba(0, 0, 0, 0) 80%
+          );
+        }
+
+        .black-hole.active {
+          animation: blackHolePull 2.2s cubic-bezier(0.16, 0, 0.3, 1)
+            forwards;
+        }
+
+        @keyframes portalPulse {
+          0%,
+          100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.04);
+          }
+        }
+
+        @keyframes portalDive {
+          0% {
+            transform: scale(1) rotate(0deg);
+            filter: drop-shadow(0 0 18px rgba(182, 147, 255, 0.55));
+          }
+          100% {
+            transform: scale(3.4) rotate(360deg);
+            filter: blur(1px)
+              drop-shadow(0 0 28px rgba(90, 60, 140, 0.6));
+            opacity: 0.7;
+          }
+        }
+
+        @keyframes blackHolePull {
+          0% {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.05);
+          }
+          55% {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(0.55);
+          }
+          100% {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.05);
+          }
+        }
+      `}</style>
     </>
   );
 }
