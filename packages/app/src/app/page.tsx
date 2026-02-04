@@ -1,15 +1,21 @@
 'use client';
 
+import { useAccount, useConnect } from 'wagmi';
 import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { testWeb3 } from '@/lib/web3Test';
 
 export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const router = useRouter();
 
+  const { address, isConnected } = useAccount();
+  const { connect, connectors } = useConnect();
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
@@ -17,6 +23,7 @@ export default function Home() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     };
+
     resize();
     window.addEventListener('resize', resize);
 
@@ -30,22 +37,36 @@ export default function Home() {
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
       stars.forEach((s) => {
         s.y -= s.speed;
         if (s.y < 0) {
           s.y = canvas.height;
           s.x = Math.random() * canvas.width;
         }
+
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255,255,255,${s.alpha})`;
         ctx.fill();
       });
+
       requestAnimationFrame(animate);
     };
 
     animate();
-    return () => window.removeEventListener('resize', resize);
+
+    testWeb3()
+      .then((block) => {
+        console.log('✅ Web3 çalışıyor. Block:', block);
+      })
+      .catch((err) => {
+        console.error('❌ Web3 hata:', err);
+      });
+
+    return () => {
+      window.removeEventListener('resize', resize);
+    };
   }, []);
 
   return (
@@ -115,7 +136,7 @@ export default function Home() {
           The Universe through a Virtuous Kid&apos;s Eye
         </p>
 
-        {/* 🌀 LOGO + ETKİLEŞİM */}
+        {/* 🌀 LOGO */}
         <div
           style={{
             position: 'relative',
@@ -123,7 +144,6 @@ export default function Home() {
             height: '380px',
           }}
         >
-          {/* LOGO */}
           <img
             src="/Pmk.png"
             alt="Pure Mystic Kids Portal"
@@ -131,11 +151,9 @@ export default function Home() {
               width: '380px',
               height: '380px',
               display: 'block',
-              transition: 'transform 0.3s ease',
             }}
           />
 
-          {/* ☀️ GÜNEŞ */}
           <button
             onClick={() => router.push('/gunes')}
             style={{
@@ -148,17 +166,8 @@ export default function Home() {
               border: 'none',
               cursor: 'pointer',
             }}
-            onMouseEnter={(e) =>
-              ((e.currentTarget.previousSibling as HTMLElement).style.transform =
-                'scale(1.05)')
-            }
-            onMouseLeave={(e) =>
-              ((e.currentTarget.previousSibling as HTMLElement).style.transform =
-                'scale(1)')
-            }
           />
 
-          {/* 🌙 AY */}
           <button
             onClick={() => router.push('/ay')}
             style={{
@@ -171,17 +180,8 @@ export default function Home() {
               border: 'none',
               cursor: 'pointer',
             }}
-            onMouseEnter={(e) =>
-              ((e.currentTarget.previousSibling as HTMLElement).style.transform =
-                'scale(1.05)')
-            }
-            onMouseLeave={(e) =>
-              ((e.currentTarget.previousSibling as HTMLElement).style.transform =
-                'scale(1)')
-            }
           />
 
-          {/* ⭐ MERKEZ YILDIZ */}
           <button
             onClick={() => router.push('/yildizlar')}
             style={{
@@ -195,36 +195,28 @@ export default function Home() {
               cursor: 'pointer',
             }}
           />
+        </div>
 
-          {/* ⭐ ÜST SOL YILDIZ */}
-          <button
-            onClick={() => router.push('/yildizlar')}
-            style={{
-              position: 'absolute',
-              top: '20px',
-              left: '180px',
-              width: '80px',
-              height: '80px',
-              background: 'transparent',
-              border: 'none',
-              cursor: 'pointer',
-            }}
-          />
-
-          {/* ⭐ ÜST SAĞ YILDIZ */}
-          <button
-            onClick={() => router.push('/yildizlar')}
-            style={{
-              position: 'absolute',
-              top: '40px',
-              right: '20px',
-              width: '80px',
-              height: '80px',
-              background: 'transparent',
-              border: 'none',
-              cursor: 'pointer',
-            }}
-          />
+        {/* 🔐 CÜZDAN BAĞLAMA */}
+        <div style={{ marginTop: '32px' }}>
+          {isConnected ? (
+            <p>Bağlandı: {address}</p>
+          ) : (
+            <button
+              onClick={() => connect({ connector: connectors[0] })}
+              style={{
+                padding: '12px 24px',
+                borderRadius: '24px',
+                border: '1px solid #e6e1ff',
+                background: 'transparent',
+                color: '#e6e1ff',
+                cursor: 'pointer',
+                fontSize: '16px',
+              }}
+            >
+              Wallet Connect
+            </button>
+          )}
         </div>
       </main>
     </>

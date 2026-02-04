@@ -3,11 +3,11 @@
   "version": "0.2.0",
   "license": "MIT",
   "scripts": {
-  "dev": "next dev",
-  "build": "npx next build",
-  "start": "next start",
-  "lint": "next lint --fix",
-  "wagmi": "wagmi generate"
+    "dev": "next dev",
+    "build": "npx next build",
+    "start": "next start",
+    "lint": "next lint --fix",
+    "wagmi": "wagmi generate"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
@@ -15,14 +15,15 @@
     "@reown/appkit-adapter-wagmi": "^1.7.3",
     "@tanstack/react-query": "^5.74.4",
     "dayjs": "^1.11.13",
+    "ethers": "^6.16.0",
     "next": "14.2.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^4.11.0",
     "react-toastify": "^10.0.5",
     "siwe": "^3.0.0",
-    "viem": "^2.27.2",
-    "wagmi": "^2.14.16"
+    "viem": "^2.45.1",
+    "wagmi": "^2.19.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
